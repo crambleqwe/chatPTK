@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import {View, TextInput, Button, StyleSheet, Alert} from 'react-native';
-import {userLogin} from "../redux/action/Auth";
+import {userLogin} from "../../redux/action/Auth";
 import {useDispatch, useSelector} from "react-redux";
+import login from "../../api/Auth";
+import adminPanelScreen from "../admin/AdminPanelScreen";
 
 const LoginScreen = ({ navigation }) => {
     const [username, setUsername] = useState('');
@@ -10,9 +12,23 @@ const LoginScreen = ({ navigation }) => {
     const userAuthenticated = useSelector(state => state.auth.isAuthenticated)
 
     const handleLogin = () => {
+        // login(username, password)
+        //     .then((response) => {
+        //         if (response) {
+        //             // Пользователь успешно вошел в систему.
+        //             console.log('Добро пожаловать, ' + response.name);
+        //         } else {
+        //             // Произошла ошибка при входе в систему.
+        //             console.log('Ошибка входа в систему');
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     });
         if (username === 'admin' && password === 'admin') {
-            // Если логин и пароль верны, перенаправляем на другой экран
-            dispatch(userLogin())
+
+            navigation.navigate("Администратор");
+            //dispatch(userLogin())
             console.log(userAuthenticated)
         } else {
             // Иначе отображаем сообщение об ошибке

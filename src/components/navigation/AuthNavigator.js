@@ -1,7 +1,8 @@
 import React from 'react';
-import LoginScreen from "../../screen/LoginScreen";
+import LoginScreen from "../../screen/auth/LoginScreen";
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AdminPanelScreen from "../../screen/admin/AdminPanelScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -11,6 +12,9 @@ const AuthNavigator = () => {
             <Stack.Screen
                 name="Авторизация"
                 component={LoginScreen}/>
+            <Stack.Screen
+                name="Администратор"
+                component={AdminPanelScreen}/>
         </Stack.Navigator>
     );
 };
