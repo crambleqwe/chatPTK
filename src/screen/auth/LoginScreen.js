@@ -4,6 +4,7 @@ import {userLogin} from "../../redux/action/Auth";
 import {useDispatch, useSelector} from "react-redux";
 import login from "../../api/Auth";
 import adminPanelScreen from "../admin/AdminPanelScreen";
+import {setUserInfo} from "../../redux/action/User";
 
 const LoginScreen = ({ navigation }) => {
     const [username, setUsername] = useState('');
@@ -12,27 +13,31 @@ const LoginScreen = ({ navigation }) => {
     const userAuthenticated = useSelector(state => state.auth.isAuthenticated)
 
     const handleLogin = () => {
-        // login(username, password)
-        //     .then((response) => {
-        //         if (response) {
-        //             // Пользователь успешно вошел в систему.
-        //             console.log('Добро пожаловать, ' + response.name);
-        //         } else {
-        //             // Произошла ошибка при входе в систему.
-        //             console.log('Ошибка входа в систему');
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     });
+        login(username, password)
+            .then((response) => {
+                if (response) {
+                    console.log(response)
+                    console.log('Добро пожаловать, ' + response.firstName);
+                    dispatch(setUserInfo(
+                        response.firstName,
+                        response.lastName,
+                        response.midName
+                    ))
+                    dispatch(userLogin())
+
+                } else {
+                    console.log('Ошибка входа в систему');
+                    Alert.alert('Ошибка', 'Неверный логин или пароль');
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
         if (username === 'admin' && password === 'admin') {
 
             navigation.navigate("Администратор");
             //dispatch(userLogin())
             console.log(userAuthenticated)
-        } else {
-            // Иначе отображаем сообщение об ошибке
-            Alert.alert('Ошибка', 'Неверный логин или пароль');
         }
     };
 
