@@ -6,7 +6,6 @@ import Schedule from "./Sсhedule";
 
 const ProfileScreen = () => {
     const userInfo = useSelector((state) => state.userInfo.user);
-
     const scheduleData = [
         {
             id: 1,

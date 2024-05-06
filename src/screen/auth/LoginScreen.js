@@ -11,20 +11,23 @@ const LoginScreen = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const dispatch = useDispatch()
     const userAuthenticated = useSelector(state => state.auth.isAuthenticated)
+    const userInfo = useSelector((state) => state.userInfo.user);
 
     const handleLogin = () => {
         login(username, password)
             .then((response) => {
                 if (response) {
-                    console.log(response)
+                    console.log(response);
+                    console.log(userInfo);
                     console.log('Добро пожаловать, ' + response.firstName);
-                    dispatch(setUserInfo(
-                        response.firstName,
-                        response.lastName,
-                        response.midName
-                    ))
-                    dispatch(userLogin())
-
+                    dispatch(setUserInfo({
+                        name: response.firstName,
+                        lastName: response.lastName,
+                        middleName: response.midName,
+                        group: 1992,
+                    }));
+                    console.log(userInfo);
+                    dispatch(userLogin());
                 } else {
                     console.log('Ошибка входа в систему');
                     Alert.alert('Ошибка', 'Неверный логин или пароль');

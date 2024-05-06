@@ -16,10 +16,13 @@ const userReducer = (state = initialState, action) => {
         case SET_USER_INFO:{
             return{
                 ...state,
-                name: action.payload.name,
-                lastName: action.payload.lastName,
-                middleName: action.payload.middleName,
-                group: action.payload.group
+                user: {
+                    name: action.payload.name,
+                    lastName: action.payload.lastName,
+                    middleName: action.payload.middleName,
+                    group: action.payload.group,
+                }
+
             }
         }
         default: return state

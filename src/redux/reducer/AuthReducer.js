@@ -1,7 +1,7 @@
 import {LOGIN, LOGOUT} from "../constants/constants";
 
 const initialState = {
-    isAuthenticated: true,
+    isAuthenticated: false,
 };
 
 const authReducer = (state = initialState, action) => {
