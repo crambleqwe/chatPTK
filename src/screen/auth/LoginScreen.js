@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import {View, TextInput, Button, StyleSheet, Alert} from 'react-native';
 import {userLogin} from "../../redux/action/Auth";
 import {useDispatch, useSelector} from "react-redux";
-import login from "../../api/Auth";
-import adminPanelScreen from "../admin/AdminPanelScreen";
+import LoginToNovSU from "../../api/Auth/LoginToNovSU";
 import {setUserInfo} from "../../redux/action/User";
+import loginToDB from "../../api/Auth/LoginToDB";
 
 const LoginScreen = ({ navigation }) => {
-    const [username, setUsername] = useState('');
+    const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch()
     const userAuthenticated = useSelector(state => state.auth.isAuthenticated)
     const userInfo = useSelector((state) => state.userInfo.user);
 
     const handleLogin = () => {
-        login(username, password)
+        LoginToNovSU(login, password)
             .then((response) => {
                 if (response) {
                     console.log(response);
@@ -26,7 +26,7 @@ const LoginScreen = ({ navigation }) => {
                         middleName: response.midName,
                         group: 1992,
                     }));
-                    console.log(userInfo);
+                    loginToDB(login, password).then(r => {console.log(r)})
                     dispatch(userLogin());
                 } else {
                     console.log('Ошибка входа в систему');
@@ -36,7 +36,8 @@ const LoginScreen = ({ navigation }) => {
             .catch((error) => {
                 console.log(error);
             });
-        if (username === 'admin' && password === 'admin') {
+
+        if (login === 'admin' && password === 'admin') {
 
             navigation.navigate("Администратор");
             //dispatch(userLogin())
@@ -49,8 +50,8 @@ const LoginScreen = ({ navigation }) => {
             <TextInput
                 style={styles.input}
                 placeholder="Логин"
-                onChangeText={text => setUsername(text)}
-                value={username}
+                onChangeText={text => setLogin(text)}
+                value={login}
             />
             <TextInput
                 style={styles.input}

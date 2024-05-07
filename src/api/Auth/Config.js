@@ -1,0 +1,1 @@
+export const DB_HOST = "https://localhost:18001"

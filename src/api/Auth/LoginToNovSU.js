@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const login = async function (login: string, password: string) {
+const LoginToNovSU = async function (login: string, password: string) {
     try {
         const response = await axios({
             method: 'POST',
@@ -22,4 +22,4 @@ const login = async function (login: string, password: string) {
     return false;
 };
 
-export default login
+export default LoginToNovSU
