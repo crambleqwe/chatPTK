@@ -1,25 +1,27 @@
-import axios from "axios";
-import { DB_HOST } from "./Config";
+import {DB_HOST} from "../Config";
 
-const loginToDB = async (username, password, first_name, last_name, father_name) => {
+const LoginToDB = async function (login: string, password: string, first_name, last_name, father_name) {
     try {
-        const response = await axios.post(`https://viseliza.site/api/user/auth`, {
-            data: {
-                login: username,
-                password: password,
-                first_name: first_name,
-                last_name: last_name,
-                father_name: father_name,
-            },
+        const response = await fetch(`${DB_HOST}/api/user/auth`, {
+            method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
-            }
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                login,
+                password,
+                first_name,
+                last_name,
+                father_name
+            }),
         });
 
-        return response.data;
+        const data = await response.json();
+        return data ?? false;
     } catch (error) {
-        console.error(error);
+        console.log(error);
     }
+    return false;
 };
 
-export default loginToDB;
+export default LoginToDB;

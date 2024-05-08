@@ -3,8 +3,9 @@ import {View, TextInput, Button, StyleSheet, Alert} from 'react-native';
 import {userLogin} from "../../redux/action/Auth";
 import {useDispatch, useSelector} from "react-redux";
 import LoginToNovSU from "../../api/Auth/LoginToNovSU";
-import {setUserInfo} from "../../redux/action/User";
+import {setUserid, setUserInfo} from "../../redux/action/User";
 import loginToDB from "../../api/Auth/LoginToDB";
+import GetUserGroup from "../../api/UserInfo/GetUserGroup";
 
 const LoginScreen = ({ navigation }) => {
     const [login, setLogin] = useState('');
@@ -14,19 +15,29 @@ const LoginScreen = ({ navigation }) => {
     const userInfo = useSelector((state) => state.userInfo.user);
 
     const handleLogin = () => {
+        // кидаем запрос на сайт новсу, в случае корректного ответа прокидываем в редакс данные из ответа, затем логинимся уже в своей системе
         LoginToNovSU(login, password)
             .then((response) => {
-                if (response) {
-                    console.log(response);
-                    console.log(userInfo);
-                    console.log('Добро пожаловать, ' + response.firstName);
+                console.log(response)
+                if (response.firstName !== null && response !== false  ) {
+                    //console.log('Добро пожаловать, ' + response.firstName);
                     dispatch(setUserInfo({
                         name: response.firstName,
                         lastName: response.lastName,
                         middleName: response.midName,
-                        group: 1992,
+                        login: login,
+                        group: 1992
                     }));
-                    loginToDB(login, password).then(r => {console.log(r)})
+                    //логинимся в своей системе, получаем в ответ айди юзера, который будет использоваться в завпросах вдальнейшем
+                    loginToDB(login, password, response.firstName, response.lastName, response.midName )
+                        .then(
+                            (response) => {
+                                dispatch(setUserid({
+                                    user_id: response.user_id,
+                                }));
+                            }
+                        )
+                    GetUserGroup(userInfo.user_id).then( r => console.log(r))
                     dispatch(userLogin());
                 } else {
                     console.log('Ошибка входа в систему');
@@ -36,7 +47,6 @@ const LoginScreen = ({ navigation }) => {
             .catch((error) => {
                 console.log(error);
             });
-
         if (login === 'admin' && password === 'admin') {
 
             navigation.navigate("Администратор");
