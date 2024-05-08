@@ -6,19 +6,22 @@ import {userLogin} from "../../redux/action/Auth";
 import {useEffect} from "react";
 
 const Navigation = () => {
-    const dispath = useDispatch()
-    const userAuthenticated = useSelector(state => state.auth.isAuthenticated)
+    const dispatch = useDispatch();
+    const userAuthenticated = useSelector(state => state.userInfo.user.isAuthenticated);
+    console.log('userAuthenticated: ', userAuthenticated)
     useEffect(() => {
-        // Загружаем состояние аутентификации из хранилища
-        AsyncStorage.getItem('isAuthenticated').then(
-            (response) => {
-                console.log(response)
-                if(response === 'true') {dispath(userLogin())}
+        const loadAuthState = async () => {
+            const isAuthenticated = await AsyncStorage.getItem('isAuthenticated');
+            if (isAuthenticated === 'true') {
+                dispatch(userLogin());
             }
-        );
+        };
+        loadAuthState();
     }, []);
+
     return (
-        userAuthenticated ?  <MainTabsNavigator/> : <AuthNavigator />
-    )
-}
+        userAuthenticated ? <MainTabsNavigator /> : <AuthNavigator />
+    );
+};
+
 export default Navigation

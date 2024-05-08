@@ -1,8 +1,10 @@
+// стал не нужен
+
 import {LOGIN, LOGOUT} from "../constants/constants";
 import storage from "../../components/storage/Storage";
 
 const initialState = {
-    isAuthenticated: false,
+    isAuthenticated: true,
 };
 
 const authReducer = (state = initialState, action) => {
