@@ -36,5 +36,4 @@ export default {
             console.error("Ошибка при сохранении данных пользователя в AsyncStorage:", e);
         }
     }
-
 }

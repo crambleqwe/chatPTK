@@ -7,8 +7,7 @@ const Schedule = ({ data }) => {
             <Text style={styles.pairNumber}>{item.pairNumber}</Text>
             <Text style={styles.timeRange}>{item.timeRange}</Text>
             <View style={styles.subjectAndTeacher}>
-                <Text style={styles.subject}>{item.subject}</Text>
-                <Text style={styles.teacher}>{item.teacher}</Text>
+                <Text style={styles.subject}>{item.lesson}</Text>
             </View>
         </View>
     );

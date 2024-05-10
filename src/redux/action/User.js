@@ -1,7 +1,7 @@
 import {SET_USER_INFO} from "../constants/constants";
-export function setUserInfo({ name, lastName, middleName, login,  group }){
+export function setUserInfo(userInfo){
     return {
-        payload: { name, lastName, middleName, login, group },
+        payload: userInfo,
         type: SET_USER_INFO
     }
 }

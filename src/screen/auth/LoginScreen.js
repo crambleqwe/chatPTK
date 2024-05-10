@@ -32,13 +32,14 @@ const LoginScreen = ({ navigation }) => {
                     loginToDB(login, password, response.firstName, response.lastName, response.midName )
                         .then(
                             (response) => {
+                                console.log("id user: ", response.user_id)
                                 dispatch(setUserid({
                                     user_id: response.user_id,
                                 }));
+                                dispatch(userLogin());
                             }
                         )
-                    GetUserGroup(userInfo.user_id).then( r => console.log(r))
-                    dispatch(userLogin());
+
                 } else {
                     console.log('Ошибка входа в систему');
                     Alert.alert('Ошибка', 'Неверный логин или пароль');

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from "react-native";
 
-const ChatDetailScreen = ({ route, navigation }) => {
+const MessageScreen = ({ route, navigation }) => {
     const chat = route.params.chat;
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
@@ -95,4 +95,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ChatDetailScreen;
+export default MessageScreen;

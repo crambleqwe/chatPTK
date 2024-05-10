@@ -1,1 +1,1 @@
-export const DB_HOST = "http://localhost:18001"
+export const DB_HOST = "https://viseliza.site"

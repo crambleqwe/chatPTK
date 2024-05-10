@@ -17,6 +17,9 @@ const initialState = {
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_USER_INFO:{
+            let userInfoUpdate = JSON.stringify(action.payload)
+            console.log(userInfoUpdate)
+            storage.setUserInfoLocally(userInfoUpdate).then(r => console.log(" o net", JSON.parse(userInfoUpdate)));
             return{
                 ...state,
                 user: {
@@ -25,13 +28,14 @@ const userReducer = (state = initialState, action) => {
                     name: action.payload.name,
                     lastName: action.payload.lastName,
                     middleName: action.payload.middleName,
+                    user_id: action.payload.user_id,
                     group: action.payload.group,
+                    isAuthenticated: action.payload.isAuthenticated
                 }
             }
         }
         case SET_USER_ID:
-            let userInfoUpdate = JSON.stringify(action.payload.login.toString())  // todo заменить на user_id
-            storage.setUserInfoLocally(userInfoUpdate).then(r => console.log(" o net", userInfoUpdate));
+            AsyncStorage.setItem('userId', action.payload.user_id)
             return{
                 ...state,
                 user: {

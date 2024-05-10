@@ -1,19 +1,41 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {View, Text, StyleSheet, FlatList, ScrollView} from "react-native";
 import { useSelector } from "react-redux";
 import Schedule from "../profile/Sсhedule";
+import GetUserGroup from "../../api/UserInfo/GetUserGroup";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const HomeScreen = () => {
 
-    const scheduleData = [
+    const getUserId = async () => {
+        const keys = await AsyncStorage.getItem('userInfo');
+        console.log(`Все ключи: ${keys}`);
+    }
+    const [userGroup, setUserGroup] = useState('')
+    const [replacementData, setReplacementData] = useState([
         {
             id: 1,
-            pairNumber: 1,
-            timeRange: "08:30 - 10:10",
-            subject: "Математика",
-            teacher: "Иванов И.И.",
+            pairNumber: 2,
+            timeRange: "10:20 - 12:00",
+            subject: "Информатика",
+            teacher: "Смирнов А.А.",
         },
+        {
+            id: 2,
+            pairNumber: 4,
+            timeRange: "14:35 - 16:15",
+            subject: "Обществознание",
+            teacher: "Коновалова Е.Е.",
+        },
+    ])
+    const [scheduleData, setScheduleData] = useState([{
+        id: 1,
+        pairNumber: 1,
+        timeRange: "08:30 - 10:10",
+        subject: "Математика",
+        teacher: "Иванов И.И.",
+    },
         {
             id: 2,
             pairNumber: 2,
@@ -41,29 +63,17 @@ const HomeScreen = () => {
             timeRange: "16:26 - 18:05",
             subject: "Английский язык",
             teacher: "Кузнецова К.К.",
-        },
-    ];
-
-    const replacementData = [
-        {
-            id: 1,
-            pairNumber: 2,
-            timeRange: "10:20 - 12:00",
-            subject: "Информатика",
-            teacher: "Смирнов А.А.",
-        },
-        {
-            id: 2,
-            pairNumber: 4,
-            timeRange: "14:35 - 16:15",
-            subject: "Обществознание",
-            teacher: "Коновалова Е.Е.",
-        },
-    ];
-
+        },])
+    useEffect(() => {
+        // GetUserGroup(getUserId())
+        //     .then((r) => {
+        //         setUserGroup(r)
+        //     console.log("группа пользователя: ",r );
+        // });
+        getUserId()
+    }, []);
     return (
             <View style={styles.container}>
-
                 <FlatList
                     data={["Расписание на сегодня", "Замены на сегодня"]}
                     renderItem={({ item }) => (

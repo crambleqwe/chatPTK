@@ -21,13 +21,10 @@ const App = () => {
     }, []);
     return (
         <Provider store={store}>
-
             <NavigationContainer>
                 <Navigation>
-
                 </Navigation>
             </NavigationContainer>
-
         </Provider>
     );
 };

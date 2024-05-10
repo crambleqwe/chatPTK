@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import ChatScreen from "./ChatScreen";
-import ChatDetailScreen from "./ChatDetailScreen";
+import MessageScreen from "./MessageScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -14,9 +14,10 @@ const ChatNav = () =>{
             />
             <Stack.Screen
                 name="Messages"
-                component={ChatDetailScreen}
+                component={MessageScreen}
                 navigationOptions={{
-                    tabBarStyle: {display:"none"}
+                    tabBarStyle: {display:"none"},
+                    headerShown: false
                 }}
             />
         </Stack.Navigator>
