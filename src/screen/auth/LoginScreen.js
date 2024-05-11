@@ -28,31 +28,37 @@ const LoginScreen = ({ navigation }) => {
                         login: login,
                     }));
                     //логинимся в своей системе, получаем в ответ айди юзера, который будет использоваться в завпросах вдальнейшем
-                    loginToDB(login, password, response.firstName, response.lastName, response.midName )
+                    loginToDB(login, password, response.firstName, response.lastName, response.midName)
                         .then(
                             (response) => {
+                                console.log("asdasdasd", response)
                                 console.log("id user: ", response.user_id)
-                                dispatch(setUserid({
-                                    user_id: response.user_id,
-                                }));
-                                dispatch(userLogin());
+                                if (response.user_id) {
+                                    dispatch(setUserid({
+                                        user_id: response.user_id,
+                                    }));
+                                    if (response.role === "ADMIN") {
+                                        navigation.navigate("Администратор");
+                                    } else {
+                                        dispatch(userLogin());
+                                    }
+
+                                } else {
+                                    console.log('Ошибка входа в систему');
+                                    Alert.alert('Ошибка', 'Неверный логин или пароль');
+                                }
+
                             }
                         )
-
                 } else {
                     console.log('Ошибка входа в систему');
                     Alert.alert('Ошибка', 'Неверный логин или пароль');
                 }
+
             })
             .catch((error) => {
                 console.log(error);
             });
-        if (login === 'admin' && password === 'admin') {
-
-            navigation.navigate("Администратор");
-            //dispatch(userLogin())
-            console.log(userAuthenticated)
-        }
     };
 
     return (
