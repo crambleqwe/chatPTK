@@ -1,16 +1,43 @@
 import React, {useEffect, useState} from "react";
-import {View, Text, StyleSheet, FlatList, ScrollView} from "react-native";
-import { useSelector } from "react-redux";
+import {FlatList, StyleSheet, Text, View} from "react-native";
 import Schedule from "../profile/Sсhedule";
-import GetUserGroup from "../../api/UserInfo/GetUserGroup";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import GetUserGroup from "../../api/UserInfo/GetUserGroup";
+import getUserSchedule from "../../api/UserInfo/GetUserSchedule";
+const splitStringBeforeDays = (arrayList) => {
+    const scheduleObjectList = [];
+    try {
+        arrayList.forEach((day) => {
+            console.log("day : ", day);
 
+            // Создаем новый объект для каждого дня
+            const scheduleObject = {
+                day: day[0],
+                schedule: []
+            };
 
+            day.slice(1).forEach((element, index) => {
+                const pair = element.split('|');
+                scheduleObject.schedule.push({
+                    id: index + 1,
+                    timeRange: pair[0],
+                    info: pair[1]
+                });
+            });
+
+            scheduleObjectList.push(scheduleObject);
+            //console.log(scheduleObjectList);
+        });
+
+        return scheduleObjectList;
+    } catch (error) {
+        console.log(error);
+    }
+};
 const HomeScreen = () => {
 
     const getUserId = async () => {
-        const keys = await AsyncStorage.getItem('userInfo');
-        console.log(`Все ключи: ${keys}`);
+        return await AsyncStorage.getItem('userInfo')
     }
     const [userGroup, setUserGroup] = useState('')
     const [replacementData, setReplacementData] = useState([
@@ -29,61 +56,33 @@ const HomeScreen = () => {
             teacher: "Коновалова Е.Е.",
         },
     ])
-    const [scheduleData, setScheduleData] = useState([{
-        id: 1,
-        pairNumber: 1,
-        timeRange: "08:30 - 10:10",
-        subject: "Математика",
-        teacher: "Иванов И.И.",
-    },
-        {
-            id: 2,
-            pairNumber: 2,
-            timeRange: "10:20 - 12:00",
-            subject: "Физика",
-            teacher: "Петров П.П.",
-        },
-        {
-            id: 3,
-            pairNumber: 3,
-            timeRange: "12:45 - 14:25",
-            subject: "Русский язык",
-            teacher: "Сидорова С.С.",
-        },
-        {
-            id: 4,
-            pairNumber: 4,
-            timeRange: "14:35 - 16:15",
-            subject: "История",
-            teacher: "Васильев В.В.",
-        },
-        {
-            id: 5,
-            pairNumber: 5,
-            timeRange: "16:26 - 18:05",
-            subject: "Английский язык",
-            teacher: "Кузнецова К.К.",
-        },])
+    const [scheduleData, setScheduleData] = useState()
+
+
     useEffect(() => {
-        // GetUserGroup(getUserId())
-        //     .then((r) => {
-        //         setUserGroup(r)
-        //     console.log("группа пользователя: ",r );
-        // });
-        getUserId()
+
+        const getSchedule = async () => { // получаем номер группы пользователя
+            const response = await getUserId();
+            const temp = JSON.parse(response)
+            const user_id = JSON.parse(temp).user_id // разобраться почему так работает
+            console.log("user_id: ", user_id)
+            const userGroupName = await GetUserGroup(user_id)
+            setUserGroup(userGroupName.name)
+            const scheduleResponse = await getUserSchedule(userGroupName.name)
+            console.log(scheduleResponse)
+
+            const scheduleData =  scheduleResponse.scheduleList
+            const parseScheduleData = splitStringBeforeDays(scheduleData)
+            console.log(parseScheduleData)
+            setScheduleData(parseScheduleData)
+
+        }
+
+        getSchedule().then()
     }, []);
     return (
             <View style={styles.container}>
-                <FlatList
-                    data={["Расписание на сегодня", "Замены на сегодня"]}
-                    renderItem={({ item }) => (
-                        <View style={styles.container}>
-                            <Text style={styles.label}>{item}</Text>
-                            <Schedule data={item === "Расписание на сегодня" ? scheduleData : replacementData} />
-                        </View>
-                    )}
-                    keyExtractor={(item) => item}
-                />
+               <Schedule data={scheduleData}></Schedule>
             </View>
     );
 };

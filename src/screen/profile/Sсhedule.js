@@ -1,14 +1,20 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, FlatList, ScrollView } from "react-native";
+import {View, Text, StyleSheet, FlatList, ScrollView, Dimensions} from "react-native";
 
 const Schedule = ({ data }) => {
+
     const renderItem = ({ item }) => (
-        <View style={styles.item}>
-            <Text style={styles.pairNumber}>{item.pairNumber}</Text>
-            <Text style={styles.timeRange}>{item.timeRange}</Text>
-            <View style={styles.subjectAndTeacher}>
-                <Text style={styles.subject}>{item.lesson}</Text>
-            </View>
+        <View style={styles.container}>
+            <Text style={styles.dayTitle}>{item.day}</Text>
+            {item.schedule.map((scheduleItem) => (
+                <View key={scheduleItem.id} style={styles.scheduleItem}>
+                    <Text>{scheduleItem.timeRange} </Text>
+                    <View style={styles.scheduleInfo}>
+                        <Text >{scheduleItem.info}</Text>
+                    </View>
+
+                </View>
+            ))}
         </View>
     );
 
@@ -16,7 +22,7 @@ const Schedule = ({ data }) => {
         <FlatList
             data={data}
             renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()} // Ensure key is a string
+            keyExtractor={item => item.day}
         />
     );
 };
@@ -25,7 +31,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#fff",
-        padding: 20,
+
     },
     item: {
         flexDirection: "row",
@@ -33,7 +39,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderBottomWidth: 1,
         borderBottomColor: "#ccc",
-        flex: 1, // Make the item full width
+
     },
     pairNumber: {
         fontSize: 16,
@@ -47,19 +53,23 @@ const styles = StyleSheet.create({
         width: 100,
         paddingHorizontal: 10,
     },
-    subjectAndTeacher: {
-        flex: 1,
-        flexDirection: "column", // Change to column for subject and teacher to display vertically
+    dayTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginTop: 20,
+        color: 'black'
     },
-    subject: {
+    scheduleItem: {
+        marginLeft: 20,
         fontSize: 16,
-        fontWeight: "normal",
-        marginBottom: 5, // Add margin bottom for spacing between subject and teacher
+        flexDirection:"row",
+        width: Dimensions.get('window').width - 160
     },
-    teacher: {
-        fontSize: 16,
-        fontWeight: "normal",
-    },
+    scheduleInfo: {
+        flexWrap: "wrap",
+        flexDirection: "row",
+    }
+
 });
 
 export default Schedule;
