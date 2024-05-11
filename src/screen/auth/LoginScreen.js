@@ -26,7 +26,6 @@ const LoginScreen = ({ navigation }) => {
                         lastName: response.lastName,
                         middleName: response.midName,
                         login: login,
-                        group: 1992 // todo переместить в отдельный запрос
                     }));
                     //логинимся в своей системе, получаем в ответ айди юзера, который будет использоваться в завпросах вдальнейшем
                     loginToDB(login, password, response.firstName, response.lastName, response.midName )

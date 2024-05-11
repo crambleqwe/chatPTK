@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {View, Text, StyleSheet, FlatList, ScrollView, Dimensions} from "react-native";
 
 const Schedule = ({ data }) => {
-
     const renderItem = ({ item }) => (
         <View style={styles.container}>
             <Text style={styles.dayTitle}>{item.day}</Text>

@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from "react";
-import {FlatList, StyleSheet, Text, View} from "react-native";
+import {StyleSheet, View} from "react-native";
 import Schedule from "../profile/Sсhedule";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import GetUserGroup from "../../api/UserInfo/GetUserGroup";
 import getUserSchedule from "../../api/UserInfo/GetUserSchedule";
-const splitStringBeforeDays = (arrayList) => {
+
+export const splitStringBeforeDays = (arrayList) => {
     const scheduleObjectList = [];
     try {
         arrayList.forEach((day) => {
-            console.log("day : ", day);
-
+            //console.log("day : ", day);
             // Создаем новый объект для каждого дня
             const scheduleObject = {
                 day: day[0],
@@ -34,11 +34,23 @@ const splitStringBeforeDays = (arrayList) => {
         console.log(error);
     }
 };
-const HomeScreen = () => {
+export const getSchedule = async () => { // получаем номер группы пользователя
+    const response = await getUserId();
+    const temp = JSON.parse(response)
+    const user_id = JSON.parse(temp).user_id // разобраться почему так работает
+    console.log("user_id: ", user_id)
+    const userGroupName = await GetUserGroup(user_id)
+    const scheduleResponse = await getUserSchedule(userGroupName.name)
+    //console.log(scheduleResponse)
+    const scheduleData =  scheduleResponse.scheduleList
+    //console.log(parseScheduleData)
+    return splitStringBeforeDays(scheduleData)
 
-    const getUserId = async () => {
-        return await AsyncStorage.getItem('userInfo')
-    }
+}
+export const getUserId = async () => {
+    return await AsyncStorage.getItem('userInfo')
+}
+const HomeScreen = () => {
     const [userGroup, setUserGroup] = useState('')
     const [replacementData, setReplacementData] = useState([
         {
@@ -61,24 +73,7 @@ const HomeScreen = () => {
 
     useEffect(() => {
 
-        const getSchedule = async () => { // получаем номер группы пользователя
-            const response = await getUserId();
-            const temp = JSON.parse(response)
-            const user_id = JSON.parse(temp).user_id // разобраться почему так работает
-            console.log("user_id: ", user_id)
-            const userGroupName = await GetUserGroup(user_id)
-            setUserGroup(userGroupName.name)
-            const scheduleResponse = await getUserSchedule(userGroupName.name)
-            console.log(scheduleResponse)
-
-            const scheduleData =  scheduleResponse.scheduleList
-            const parseScheduleData = splitStringBeforeDays(scheduleData)
-            console.log(parseScheduleData)
-            setScheduleData(parseScheduleData)
-
-        }
-
-        getSchedule().then()
+        getSchedule().then(r => setScheduleData(r))
     }, []);
     return (
             <View style={styles.container}>

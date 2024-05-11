@@ -18,19 +18,12 @@ const userReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_USER_INFO:{
             let userInfoUpdate = JSON.stringify(action.payload)
-            console.log(userInfoUpdate)
-            storage.setUserInfoLocally(userInfoUpdate).then(r => console.log(" o net", JSON.parse(userInfoUpdate)));
+            storage.setUserInfoLocally(userInfoUpdate).then(r => console.log(JSON.parse(userInfoUpdate)));
             return{
                 ...state,
                 user: {
                     ...state.user,
-                    login : action.payload.login,
-                    name: action.payload.name,
-                    lastName: action.payload.lastName,
-                    middleName: action.payload.middleName,
-                    user_id: action.payload.user_id,
-                    group: action.payload.group,
-                    isAuthenticated: action.payload.isAuthenticated
+                    ...action.payload
                 }
             }
         }
@@ -50,6 +43,7 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 user : {
+                    ...state.user,
                     isAuthenticated: true}
                 };
         case LOGOUT:
@@ -58,6 +52,7 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 user : {
+                    ...state.user,
                     isAuthenticated: false
                 }
             };
