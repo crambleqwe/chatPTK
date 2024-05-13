@@ -4,13 +4,31 @@ import {useDispatch, useSelector} from "react-redux";
 import {userLogout} from "../../redux/action/Auth";
 import {getSchedule, getUserId} from "../home/HomeScreen";
 import Schedule from "./Sсhedule";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import getUserSchedule from "../../api/UserInfo/GetUserSchedule";
-import {log} from "expo/build/devtools/logger";
+import RenderHtml from 'react-native-render-html';
 import getUserProfile from "../../api/UserInfo/GetUserProfile";
+import getReplacement from "../../api/Schedule/GetReplacement";
+import Replacement from "./Replacement";
+
+export const replacementParser = (data) => {
+    const dataArray = data.split('\n\n');
+    const formatedData = [];
+
+    for (let i = 0; i < dataArray.length; i++) {
+        const data = dataArray[i].split('\n');
+        formatedData[i] = {};
+        formatedData[i].id = i;
+        formatedData[i].group = data[0];
+        formatedData[i].row_number = data[1];
+        formatedData[i].perv = data[2];
+        formatedData[i].replace = data[3];
+    }
+
+    return formatedData;
+}
 const ProfileScreen = () => {
     const [scheduleData, setScheduleData] = useState()
     const [userInfo, setUserInfo] = useState('');
+    const [replacement, setReplacement] = useState('')
     const dispatch = useDispatch()
     const date = new Date()
     const todayIndex = date.getDay() - 1
@@ -29,6 +47,10 @@ const ProfileScreen = () => {
             .then((r) =>  {
             setScheduleData([r[todayIndex]])
         })
+        getReplacement(1).then(r => {
+            const formatedReplacement = replacementParser(r.text)
+            setReplacement(formatedReplacement)
+        })
     }, []);
     const logoutButtonPressed = () =>
     {
@@ -42,6 +64,8 @@ const ProfileScreen = () => {
                 </Text>
             </View>
             <Schedule data={scheduleData}></Schedule>
+            <Text>Замены</Text>
+            <Replacement data={replacement}></Replacement>
 
             <View style={styles.container}>
                 <Button style={styles.button} title="выйти" onPress={logoutButtonPressed} />

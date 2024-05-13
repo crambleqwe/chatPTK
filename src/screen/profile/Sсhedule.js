@@ -21,7 +21,7 @@ const Schedule = ({ data }) => {
         <FlatList
             data={data}
             renderItem={renderItem}
-            keyExtractor={item => item.day}
+            keyExtractor={item => item.id}
         />
     );
 };

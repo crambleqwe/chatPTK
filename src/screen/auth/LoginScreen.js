@@ -19,7 +19,7 @@ const LoginScreen = ({ navigation }) => {
         LoginToNovSU(login, password)
             .then((response) => {
                 console.log(response)
-                if (response.firstName !== null && response !== false  ) {
+                if (response.firstName !== null  ) {
                     //console.log('Добро пожаловать, ' + response.firstName);
                     dispatch(setUserInfo({
                         name: response.firstName,
@@ -31,7 +31,7 @@ const LoginScreen = ({ navigation }) => {
                     loginToDB(login, password, response.firstName, response.lastName, response.midName)
                         .then(
                             (response) => {
-                                console.log("asdasdasd", response)
+
                                 console.log("id user: ", response.user_id)
                                 if (response.user_id) {
                                     dispatch(setUserid({

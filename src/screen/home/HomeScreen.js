@@ -3,7 +3,7 @@ import {StyleSheet, View} from "react-native";
 import Schedule from "../profile/Sсhedule";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import GetUserGroup from "../../api/UserInfo/GetUserGroup";
-import getUserSchedule from "../../api/UserInfo/GetUserSchedule";
+import getUserSchedule from "../../api/Schedule/GetUserSchedule";
 
 export const splitStringBeforeDays = (arrayList) => {
     const scheduleObjectList = [];
