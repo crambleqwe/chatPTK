@@ -1,29 +1,14 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from "react-native";
 import emptyAvatar from "../../../assets/emptyAvatar.png";
-
+// todo экран не сделан, по вебсокету получить список комнат, затем по тапу на комнату получить сообщения в чате, также вебсокетом отлавливать обновление данных
 const ChatScreen = ({ navigation }) => {
     const [chats, setChats] = useState([
         {
             id: 1,
             name: "1992",
             avatar: "../../../assets/emptyAvatar.png",
-        },
-        {
-            id: 2,
-            name: "Матвей Богданов",
-            avatar: "../../../assets/emptyAvatar.png",
-        },
-        {
-            id: 3,
-            name: "Владислав Иванов",
-            avatar: "../../../assets/emptyAvatar.png",
-        },
-        {
-            id: 4,
-            name: "Любовь Николаевна",
-            avatar: "../../../assets/emptyAvatar.png",
-        },
+        }
     ]);
 
     const renderItem = ({ item }) => (
