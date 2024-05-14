@@ -5,17 +5,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import GetUserGroup from "../../api/UserInfo/GetUserGroup";
 import getUserSchedule from "../../api/Schedule/GetUserSchedule";
 
-export const splitStringBeforeDays = (arrayList) => {
+export const schedulePacer = (arrayList) => {
     const scheduleObjectList = [];
     try {
         arrayList.forEach((day) => {
-            //console.log("day : ", day);
-            // Создаем новый объект для каждого дня
             const scheduleObject = {
                 day: day[0],
                 schedule: []
             };
-
             day.slice(1).forEach((element, index) => {
                 const pair = element.split('|');
                 scheduleObject.schedule.push({
@@ -24,11 +21,8 @@ export const splitStringBeforeDays = (arrayList) => {
                     info: pair[1]
                 });
             });
-
             scheduleObjectList.push(scheduleObject);
-            //console.log(scheduleObjectList);
         });
-
         return scheduleObjectList;
     } catch (error) {
         console.log(error);
@@ -44,30 +38,13 @@ export const getSchedule = async () => { // получаем номер груп
     //console.log(scheduleResponse)
     const scheduleData =  scheduleResponse.scheduleList
     //console.log(parseScheduleData)
-    return splitStringBeforeDays(scheduleData)
+    return schedulePacer(scheduleData)
 
 }
 export const getUserId = async () => {
     return await AsyncStorage.getItem('userInfo')
 }
 const HomeScreen = () => {
-    const [userGroup, setUserGroup] = useState('')
-    const [replacementData, setReplacementData] = useState([
-        {
-            id: 1,
-            pairNumber: 2,
-            timeRange: "10:20 - 12:00",
-            subject: "Информатика",
-            teacher: "Смирнов А.А.",
-        },
-        {
-            id: 2,
-            pairNumber: 4,
-            timeRange: "14:35 - 16:15",
-            subject: "Обществознание",
-            teacher: "Коновалова Е.Е.",
-        },
-    ])
     const [scheduleData, setScheduleData] = useState()
 
 

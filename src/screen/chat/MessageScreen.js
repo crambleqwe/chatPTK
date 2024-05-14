@@ -10,7 +10,35 @@ const MessageScreen = ({ route, navigation }) => {
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
 
-   п
+    useEffect(() => {
+        const getUserID = async() =>{
+            const response = await getUserId();
+            const temp = JSON.parse(response)
+            return  JSON.parse(temp).user_id // разобраться почему так работает
+        }
+        getUserID()
+            .then(r => setUserID(r))
+
+
+        const socketConnection = io(`${DB_HOST}`);
+        setSocket(socketConnection)
+        socketConnection.on("connect", () => {
+            console.log("socket connect status: ", socketConnection.connected)
+            socketConnection.emit("join", { first_name: "Данил" }, () => {
+                socketConnection.emit("joinRoom", { id: 1, name: "1992" })
+            })
+            socketConnection.emit("takeMessages", { room_id: 1, row: 0 })
+            socketConnection.on("getMessages", async (response) => {
+                console.log(response)
+                setMessages(response)
+            })
+            socketConnection.on("message", async (message) => {
+                console.log(message)
+                setMessages((prevMessages) => [...prevMessages, message]);
+            })
+        })
+        navigation.setOptions({ title: chat.name });
+    }, []);
     const messageObjectCreator= (message) => {
         const messageObject = {}
         messageObject.user_id = userID

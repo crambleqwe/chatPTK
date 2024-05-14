@@ -13,7 +13,14 @@ const AdminPanelScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Button style={styles.button} title="Обновить расписание" onPress={updateSchedule} />
+            <View style={styles.button}>
+                <Button title="Обновить расписание" onPress={updateSchedule} />
+            </View>
+            <View style={styles.button}>
+                <Button title={"Отчет о заменах"} onPress={()=>{console.log(1)}}></Button>
+            </View>
+
+
         </View>
     );
 };
@@ -24,6 +31,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    button: {
+        margin:  10
+    }
 });
 
 export default AdminPanelScreen;

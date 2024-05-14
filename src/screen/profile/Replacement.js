@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'normal',
         flex: 2,
-        margin: 10
+        margin: 8
     },
     teacher: {
         fontSize: 14,
