@@ -7,6 +7,7 @@ import Schedule from "./Sсhedule";
 import getUserProfile from "../../api/UserInfo/GetUserProfile";
 import getReplacement from "../../api/Schedule/GetReplacement";
 import Replacement from "./Replacement";
+import ChangeStatus from "../../api/UserInfo/ChangeStatus";
 
 export const replacementParser = (data) => {
     const dataArray = data.split('\n\n');
@@ -27,6 +28,7 @@ const ProfileScreen = () => {
     const [scheduleData, setScheduleData] = useState()
     const [userInfo, setUserInfo] = useState('');
     const [replacement, setReplacement] = useState('')
+    const [status, setStatus] = useState(userInfo.status)
     const dispatch = useDispatch()
     const date = new Date()
     const todayIndex = date.getDay() - 1
@@ -63,9 +65,12 @@ const ProfileScreen = () => {
     };
 
     const saveStatus = () => {
+        setIsEditingStatus(editedStatus)
+        ChangeStatus(userInfo.user_id, editedStatus).then(r => {
+            console.log(r)
+            setStatus(r.status)
+        })
         setIsEditingStatus(false);
-
-        // Здесь выполните функцию по изменению статуса с помощью editedStatus
     };
 
     return (
@@ -84,7 +89,7 @@ const ProfileScreen = () => {
                         />
                     ) : (
                         <TouchableOpacity onPress={editStatus}>
-                            <Text style={userInfo.status ? styles.status: styles.nullableStatus}>{userInfo.status ?? "расскажите о себе"}</Text>
+                            <Text style={ status ? styles.status: styles.nullableStatus}>{status?? "расскажите о себе"}</Text>
                         </TouchableOpacity>
                     )}
                     {isEditingStatus && (

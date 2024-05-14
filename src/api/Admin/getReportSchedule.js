@@ -1,6 +1,6 @@
 import {DB_HOST} from "../Config";
 
-const UpdateReplacement = async (date) => {
+const getReplacement = async (date) => {
     const url = `${DB_HOST}/api/admin/update/replacement/`;
     const response = await fetch(url, {
         method: 'GET',
@@ -8,6 +8,6 @@ const UpdateReplacement = async (date) => {
             'Content-Type': 'application/json',
         },
     });
-    return await response.json();
+    return response.toString();
 }
-export default UpdateReplacement;
+export default getReplacement;

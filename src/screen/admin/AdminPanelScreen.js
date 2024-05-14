@@ -5,42 +5,28 @@ import { userLogout} from "../../redux/action/Auth";
 import UpdateSchedule from "../../api/Admin/UpdateSchedule";
 import UpdateReplacement from "../../api/Admin/UpdateReplacement";
 import * as Print from "expo-print";
+import getReportSchedule from "../../api/Admin/getReportSchedule";
 
-
+export const dateParcer = (date) => {
+    const dateParts = date.split("/");
+    [dateParts[0], dateParts[1]] = [dateParts[1], dateParts[0]];
+    return dateParts.join("/");
+}
 const AdminPanelScreen = ({ navigation }) => {
-    const dateParcer = (date) => {
-        const dateParts = date.split("/");
-        [dateParts[0], dateParts[1]] = [dateParts[1], dateParts[0]];
-        return dateParts.join("/");
-    }
+    const [html, setHtml] = useState()
+    const date = new Date()
+    const formattedDate = dateParcer(date.toLocaleDateString())
 
     const updateSchedule = () => {
         UpdateSchedule()
     };
     const updateReplacement = () => {
-        const date = new Date()
-        const formatedDate = dateParcer(date.toLocaleDateString())
-        UpdateReplacement(formatedDate)
+        UpdateReplacement(formattedDate)
     }
     const printToFile = async () => {
-        const html = `
-                <html>
-                  <head>
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-                  </head>
-                  <body style="text-align: center;">
-                    <h1 style="font-size: 50px; font-family: Helvetica Neue; font-weight: normal;">
-                      Hello Expo!
-                    </h1>
-                    <img
-                      src="https://d30j33t1r58ioz.cloudfront.net/static/guides/sdk.png"
-                      style="width: 90vw;" />
-                  </body>
-                </html>
-        `;
-        // On iOS/android prints the given html. On web prints the HTML from the current page.
-        const { uri } = await Print.printToFileAsync({ html });
-        console.log('File has been saved to:', uri);
+        getReportSchedule(formattedDate).then(r => console.log(r))
+//const { uri } = await Print.printToFileAsync({ html });
+ //       console.log('File has been saved to:', uri);
     };
 
     return (
